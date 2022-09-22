@@ -8,35 +8,39 @@ Change to AUD/JPY
     Click Element    //*[@class="sc-mcd__item sc-mcd__item--frxAUDJPY "]
 
 Change Contract Type
-   Click Element    //*[@id="dt_contract_dropdown"]
+    Click Element    //*[@id="dt_contract_dropdown"]
     Wait Until Page Contains Element    dt_contract_high_low_item    10
     Click Element    dt_contract_high_low_item
 
 *** Test Cases ***
-Buy Lower Contract
-    
-    #Login 
+Login To Deriv
     Open Browser    https://app.deriv.com/    chrome
     Maximize Browser Window
     Wait Until Page Contains Element    //div[@class='btn-purchase__text_wrapper' and contains(.,'Rise')]    60
     Click Element    dt_login_button 
     Wait Until Page Contains Element    //input[@type='email']    10
-    Input Text    //input[@type='email']        # to remove
-    Input Text    //input[@type='password']             # to remove
+
+Log in with Email and Password
+    Input Text    //input[@type='email']    esther@besquare.com.my    # to remove
+    Input Text    //input[@type='password']    Esther@970630          # to remove
     Click Element    //button[@type='submit'] 
+
+Verify Real Account
     Wait Until Page Does Not Contain Element    //*[@aria-label="Loading interface..."]    10
     Wait Until Page Contains Element    dt_core_account-info_acc-info    30
     Wait Until Page Contains Element    //*[@class='dc-icon acc-info__id-icon acc-info__id-icon--usd']    30
     Wait Until Element Is Visible    //button[@class='dc-btn dc-btn__effect dc-btn--primary acc-info__button']     30   
+
+Switch to Demo Account 
     Click Element     dt_core_account-info_acc-info
     Click Element    dt_core_account-switcher_demo-tab
     Click Element    //span[@class="acc-switcher__id"]
-    Wait Until Page Does Not Contain Element    //*[@aria-label="Loading interface..."]    10
+    Wait Until Page Does Not Contain Element    //*[@aria-label="Loading interface..."]    30
     Wait Until Element Is Visible    //*[@class="dc-icon acc-info__id-icon acc-info__id-icon--virtual"]    30
 
-    # Change to AUD/JPY
+Buy Lower Contract
     Change to AUD/JPY
-    Wait Until Page Does Not Contain Element    //*[@aria-label="Loading interface..."]    10
+    Wait Until Page Does Not Contain Element    //*[@aria-label="Loading interface..."]    30
 
     # Change contract type
     Wait Until Page Contains Element    //*[@class="sidebar__items"]    10
