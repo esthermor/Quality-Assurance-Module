@@ -1,9 +1,10 @@
 *** Settings ***
-Library    SeleniumLibrary
+Library    SeleniumLibrary   
+Library    String
 
 *** Variables ***
-${fee10}    //span[@class="dc-text"]  //span['11.48']
-${fee15}    //span[@class="dc-text"]  //span['15.66']
+${dealCancellationFee}    //*[@class="trade-container__price-info-currency"]  
+${valueOne}=    1
    
 
 *** Keywords ***
@@ -27,7 +28,7 @@ Login To Deriv
 
 Log in with Email and Password
     Input Text    //input[@type='email']        # to remove
-    Input Text    //input[@type='password']              # to remove
+    Input Text    //input[@type='password']             # to remove
     Click Element    //button[@type='submit'] 
 
 Verify Real Account
@@ -73,26 +74,22 @@ Verify Multiplier
         Page Should Contain Element    //*[@class="dc-list__item" and @id='${id}']
     END
 
-Deal Cancellation Fee when Stake is 10 USD
+Verify Correlation between Cancellation Fee and Stake
+# Deal Cancellation Fee when Stake is 10 USD
     Click Element    //*[@class="dc-checkbox"]
-    Get Value    ${fee10}   
+    Wait Until Page Contains Element    ${dealCancellationFee}    10
+    ${stake10}=    Get Text    ${dealCancellationFee}
+    ${stake10}=    Replace String    ${stake10}    USD    ${EMPTY}       
 
-Deal Cancellation Fee when Stake is 15 USD
+# Deal Cancellation Fee when Stake is 15 USD
     Click Element    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input"]
     Press Keys       //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input"]    CTRL+a\ue003
     Input Text    //*[@class="dc-input-wrapper__input input--has-inline-prefix input input--error trade-container__input"]    15
     Wait Until Element Is Enabled    dt_purchase_multup_button    10
-    Get Value    ${fee15}
+    ${stake15}=    Get Text    ${dealCancellationFee} 
+    ${stake15}=    Replace String    ${stake15}    USD    ${EMPTY}   
 
-Verify Correlation between Cancellation Fee and Stake
-    ${fee10}    Convert To Number    ${fee10}
-    ${fee15}    Convert To Number    ${fee15}
-
-   IF  ${fee15} <= ${fee10}
-
-   Fail
-       
-   END
+   Should Be True   ${stake15}>${stake10}
    
 Verify Maximum Stake is 2000 USD
     Click Element    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input"]
@@ -112,13 +109,17 @@ Verify Single Click on Plus Button of Take Profit
     ${originalValue}    Get Value    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input" and @value='0']
     Click Element    dc_take_profit_input_add
     ${clickPlus}    Get Value    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input" and @value='1']
-    Should Not Be Equal    ${clickPlus}  ${originalValue}    #How to verify adding by only 1
+    ${clickPlus}    Convert To Number    ${clickPlus}
+    ${addByOne}    Evaluate    ${originalValue}+${valueOne}    
+    Should Be Equal    ${clickPlus}  ${addByOne}    
 
 Verify Single Click on Minus Button of Take Profit
     ${clickPlus}    Get Value    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input" and @value='1']
     Click Element    dc_take_profit_input_sub
     ${clickMinus}    Get Value    //*[@class="dc-input-wrapper__input input--has-inline-prefix input trade-container__input" and @value='0']
-    Should Not Be Equal    ${clickMinus}  ${clickPlus}    #How to verify subtract by only 1
+    ${clickMinus}    Convert To Number    ${clickMinus}
+    ${minusByOne}    Evaluate    ${clickPlus}-${valueOne}
+    Should Be Equal    ${clickMinus}  ${minusByOne}    
 
 Verify Deal Cancellation Parameter
     Click Element    //*[@class="dc-checkbox"]
