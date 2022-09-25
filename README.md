@@ -1,24 +1,25 @@
 # Quality-Assurance-Module
-Submit assignment
+Submitted Assignments
 
-Automation Project
-Submit assignment: Task 1, 2, 3, 4, and 5
+1. Submitted assignment:
+ - task1&2.robot (Switch to virtual account & Buy rise contract)
+ - task3.robot (Buy lower contract)
+ - task4.robot (Check relative barrier error)
+ - task5.robot (Check multiplier contract parameter)
 
-Automation on API token page
 
-What to do:
+2. Submitted assignment: 
+ - automationAPI.robot (Automation on API token page)
+ 
+ 
+3. Submitted assignment:
+ - automationClosingAcc.robot (Automation on Closing Account)
 
-Write test cases for API token page (https://app.deriv.com/account/api-token)
 
-After finished writing test cases, let the facilitators review your test case
-
-After done reviewing, you may proceed to create automation test script based on the test
-cases that you have written
-
-Key points:
-
-- The automation script should be based on the written test cases
-
-- You may skip the scenario that is not testable in robot framework
-
-Submit assignment: Automation on API token page
+Prerequisites:
+ - User should enter email and password in the robot file to run automation testing.
+ - In automationClosingAcc.robot file
+    i.  User should comment <Click Element    //*[@class="link"]> in order to proceed with the following test cases.
+    ii. User should comment test case 4 (User to click “Cancel”) in order to proceed with the following test cases.
+ 
+    
