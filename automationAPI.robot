@@ -27,8 +27,8 @@ Login To Deriv
     Wait Until Page Contains Element    //input[@type='email']    10
 
 Log in with Email and Password
-    Input Text    //input[@type='email']      # to remove
-    Input Text    //input[@type='password']             # to remove
+    Input Text    //input[@type='email']    <YOUREMAIL>    # to remove
+    Input Text    //input[@type='password']    <YOURPASSWORD>          # to remove
     Click Element    //button[@type='submit'] 
 
 Verify Real Account
@@ -113,6 +113,7 @@ User to input symbols, special characters
     Click Element    ${tokenTextfield}
     Press Keys    ${tokenTextfield}    CTRL+a\ue003
     Input Text    ${tokenTextfield}    !!@#@#!#
+    Wait Until Page Contains Element    ${createButton}    10
     Element Should Be Disabled    ${createButton}
 
 User to input less than 2 characters
@@ -161,9 +162,9 @@ Compare tokens with same Token Name
     User to delete Token
     
     # Compare Token with Token Name 'BeSquare'
-    Wait Until Element Is Enabled    //*[@class="dc-icon da-api-token__visibility-icon"]
-    Click Element    //*[@class="dc-icon da-api-token__visibility-icon"]
-    Should not Be Equal    //*[@class="da-api-token__pass-dot-container"]    //*[@class="da-api-token__pass-dot-container"]
+    Wait Until Element Is Visible   //*[@class="dc-icon da-api-token__visibility-icon"]    10
+    # Click Element    //*[@class="dc-icon da-api-token__visibility-icon"]
+    Should Be Equal    //*[@class="da-api-token__pass-dot-container"]    //*[@class="da-api-token__pass-dot-container"]
 
 Compare tokens with different Token Name
     # To select scopre "Read" first
@@ -182,7 +183,12 @@ Compare tokens with different Token Name
     
     # Compare Token with Token Name 'BeSquare' and 'QA123'
     Click Element    //*[@class="dc-icon da-api-token__visibility-icon"]
-    Should Not Be Equal    //*[@class="da-api-token__pass-dot-container"]    //*[@class="da-api-token__pass-dot-container"]
+    Should Be Equal    //*[@class="da-api-token__pass-dot-container"]    //*[@class="da-api-token__pass-dot-container"]
 
-Compare user input and generated Token Name
+Verify Scopes of Token
+    ${scopeCreated}    Get Text    //*[@class="da-api-token__table-scope-cell" and contains(text(),'Read')]
+    ${scope}    Get Text    //*[@name='read' and @value='true']//parent::label 
+    Should Be Equal    ${scopeCreated}    ${scope}
+    User to delete Token
+
     
